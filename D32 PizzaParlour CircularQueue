@@ -1,0 +1,135 @@
+#include <iostream>
+using namespace std;
+
+class PizzaParlor
+{
+private:
+    int *queue;      // Array to represent the circular queue
+    int front, rear; // Front and rear pointers
+    int capacity;    // Maximum capacity of the queue
+    int size;        // Current size of the queue
+
+public:
+    // Constructor to initialize the queue
+    PizzaParlor(int cap)
+    {
+        capacity = cap;
+        queue = new int[capacity];
+        front = rear = -1;
+        size = 0;
+    }
+
+    ~PizzaParlor()
+    {
+        delete[] queue;
+    }
+
+    bool isFull()
+    {
+        return size == capacity;
+    }
+
+    bool isEmpty()
+    {
+        return size == 0;
+    }
+
+    void placeOrder(int orderID)
+    {
+        if (isFull())
+        {
+            cout << "Sorry, the pizza parlor is at full capacity. Cannot place new order.\n";
+            return;
+        }
+        if (front == -1)
+        { 
+            front = 0;
+            rear = 0;
+        }
+        else
+        {
+            rear = (rear + 1) % capacity; 
+        }
+        queue[rear] = orderID;
+        size++;
+        cout << "Order " << orderID << " placed successfully.\n";
+    }
+
+    // Function to serve an order (remove from the queue)
+    void serveOrder()
+    {
+        if (isEmpty())
+        {
+            cout << "No orders to serve.\n";
+            return;
+        }
+        cout << "Serving Order " << queue[front] << endl;
+        front = (front + 1) % capacity; // Circular increment
+        size--;
+        if (size == 0)
+        {
+            front = rear = -1; // Reset when the queue is empty
+        }
+    }
+
+    // Function to display the current orders in the queue
+    void displayOrders()
+    {
+        if (isEmpty())
+        {
+            cout << "No orders in the queue.\n";
+            return;
+        }
+        cout << "Current Orders in the queue: ";
+        int i = front;
+        while (i != rear)
+        {
+            cout << queue[i] << " ";
+            i = (i + 1) % capacity;
+        }
+        cout << queue[rear] << endl;
+    }
+};
+
+int main()
+{
+    int capacity;
+    cout << "Enter the maximum number of orders the pizza parlor can accept: ";
+    cin >> capacity;
+
+    PizzaParlor parlor(capacity);
+
+    int choice, orderID;
+    while (true)
+    {
+        cout << "\n--- Pizza Parlor Menu ---\n";
+        cout << "1. Place Order\n";
+        cout << "2. Serve Order\n";
+        cout << "3. Display Orders\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+
+        switch (choice)
+        {
+        case 1:
+            cout << "Enter the Order ID: ";
+            cin >> orderID;
+            parlor.placeOrder(orderID);
+            break;
+        case 2:
+            parlor.serveOrder();
+            break;
+        case 3:
+            parlor.displayOrders();
+            break;
+        case 4:
+            cout << "Exiting program.\n";
+            return 0;
+        default:
+            cout << "Invalid choice, please try again.\n";
+        }
+    }
+
+    return 0;
+}
