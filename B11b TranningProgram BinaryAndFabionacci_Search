@@ -1,0 +1,57 @@
+def binary_search(arr, key):
+    left,right=0,len(arr)-1
+    while left<=right:
+        mid=(left+right)//2
+        if arr[mid]==key:
+            return True
+        elif arr[mid]<key:
+            left=mid+1
+        else:
+            right=mid-1
+    return False
+
+def fibonacci_search(arr,key):
+    n = len(arr)
+    fib_m2,fib_m1=0,1
+    fib_m=fib_m2+fib_m1
+
+    while fib_m<n:
+        fib_m2,fib_m1=fib_m1,fib_m
+        fib_m=fib_m2+fib_m1
+
+    offset= -1
+
+    while fib_m>1:
+        i=min(offset+fib_m2,n-1)
+        if arr[i]<key:
+            fib_m=fib_m1
+            fib_m1=fib_m2
+            fib_m2=fib_m-fib_m1
+            offset=i
+        elif arr[i]>key:
+            fib_m=fib_m2
+            fib_m1=fib_m1-fib_m2
+            fib_m2=fib_m-fib_m1
+        else:
+            return True
+
+    if fib_m1 and arr[offset+1]==key:
+        return True
+
+    return False
+
+# Input and Test
+students=sorted(map(int, input("Enter roll numbers of students who attended training (space-separated): ").split()))
+key=int(input("Enter the roll number to search: "))
+
+print("\nUsing Binary Search:")
+if binary_search(students,key):
+    print(f"Student with roll number {key} attended the training.")
+else:
+    print(f"Student with roll number {key} did not attend the training.")
+
+print("\nUsing Fibonacci Search:")
+if fibonacci_search(students, key):
+    print(f"Student with roll number {key} attended the training.")
+else:
+    print(f"Student with roll number {key} did not attend the training.")
