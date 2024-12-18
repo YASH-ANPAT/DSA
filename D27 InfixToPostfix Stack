@@ -1,0 +1,122 @@
+#include<iostream>
+using namespace std;
+
+class Stack
+{
+    char stack_array[50];
+    int top;
+public:
+    Stack()
+    {
+        top=-1;
+    }
+
+    void push(char symbol)
+    {
+        if(top==49)
+            cout<<"\nStack overflow.\n";
+        else
+            stack_array[++top]=symbol;
+    }
+
+    char pop()
+    {
+        if(top==-1)
+            return '#';
+        else
+            return stack_array[top--];
+    }
+
+    bool empty()
+    {
+        return top==-1;
+    }
+
+    int priority(char symbol)
+    {
+        switch(symbol)
+        {
+            case '/': return 4;
+            case '*': return 3;
+            case '+': return 2;
+            case '-': return 1;
+            case '(': return 0;
+            default: return -1;
+        }
+    }
+
+    bool isOperator(char symbol)
+    {
+        return symbol=='+'||symbol=='-'||symbol=='*'||symbol=='/';
+    }
+
+    void convertToPostfix()
+    {
+        char infix[50],postfix[50];
+        cout<<"\nEnter an infix expression: ";
+        cin>>infix;
+
+        int p=0;
+        for(int i=0;infix[i]!='\0';i++)
+        {
+            if(infix[i]>='0'&&infix[i]<='9')
+                postfix[p++]=infix[i];
+            else if(infix[i]=='(')
+                push(infix[i]);
+            else if(infix[i]==')')
+            {
+                char entry;
+                while(!empty()&&(entry=pop())!='(')
+                    postfix[p++]=entry;
+            }
+            else if(isOperator(infix[i]))
+            {
+                while(!empty()&&priority(stack_array[top])>=priority(infix[i]))
+                    postfix[p++]=pop();
+                push(infix[i]);
+            }
+        }
+        while(!empty())
+            postfix[p++]=pop();
+        postfix[p]='\0';
+        cout<<"\nThe postfix expression is: "<<postfix<<endl;
+
+        evaluatePostfix(postfix);
+    }
+
+    void evaluatePostfix(const char* postfix)
+    {
+        int s[50],top=-1;
+        for(int i=0;postfix[i]!='\0';i++)
+        {
+            if(postfix[i]>='0'&&postfix[i]<='9')
+                s[++top]=postfix[i]-'0';
+            else if(isOperator(postfix[i]))
+            {
+                int op2=s[top--];
+                int op1=s[top--];
+                switch(postfix[i])
+                {
+                    case '+': s[++top]=op1+op2; break;
+                    case '-': s[++top]=op1-op2; break;
+                    case '*': s[++top]=op1*op2; break;
+                    case '/': s[++top]=op1/op2; break;
+                }
+            }
+        }
+        cout<<"\nThe evaluated result is: "<<s[top]<<endl;
+    }
+};
+
+int main()
+{
+    char choice='y';
+    Stack expr;
+    while(choice=='y')
+    {
+        expr.convertToPostfix();
+        cout<<"\n\nDo you want to convert and evaluate another expression? (y/n): ";
+        cin>>choice;
+    }
+    return 0;
+}
