@@ -1,0 +1,36 @@
+def sort(arr):
+    if len(arr)<=1:
+        return arr
+    else:
+        less=[];more=[]
+        pivot=[arr[0]]
+        for i in arr[1:]:
+            if i>pivot[0]:
+                more.append(i)
+            elif i<=pivot[0]:
+                less.append(i) 
+    return sort(less)+pivot+sort(more)
+  
+
+def display_top5(arr):
+     print("\nTop 5 Scores :")
+     for i in arr[len(arr)-1:len(arr)-6:-1]:
+          print(i)
+        
+     
+
+list=[]
+n=int(input("Enter Number of Elements: "))
+
+for i in range(1,n+1):
+            ele=int(input(f"\nEnter Element Number {i} to be added: "))
+            list.append(ele)
+            
+print("Original list from the USER:", list)
+sorted=sort(list)
+print("Sorted list:", sorted)
+display_top5(sorted)
+
+
+
+
