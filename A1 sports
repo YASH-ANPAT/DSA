@@ -1,0 +1,51 @@
+cricket=[]
+badminton=[]
+football=[]
+c=int(input("Enter the number of student playing cricket: "))
+b=int(input("Enter the number of student playing badminton : "))
+f=int(input("Enter the number of student playing football: "))
+print("")
+for i in range (c):
+    playersC=int(input(f"Enter Roll No of Student Number {i+1} playing CRICKET : "))
+    cricket.append(playersC)
+for i in range (b):
+    playersB=int(input(f"Enter Roll No of Student Number {i+1} playing BADMINTION: "))
+    badminton.append(playersB)
+for i in range (f):
+    playersF=int(input(f"Enter Roll No of Student Number {i+1} playing FOOTBALL: "))
+    football.append(playersF)
+
+print("")
+
+print("Students playing cricket are: ",cricket)
+print("Students playing badminton are: ",badminton)
+print("Students playing football are: ",football)
+
+both_cb=[]
+for i in cricket:
+    if i in badminton:
+        both_cb.append(i)
+print("Students play both cricket and badminton are: ",both_cb)
+
+not_both_cb=[]
+for i in cricket:
+    if i not in badminton:
+        not_both_cb.append(i)
+for i in badminton:
+    if i not in cricket:
+        not_both_cb.append(i)
+print("Student playing either cricket or badminton but not both are: ",not_both_cb)
+
+nither_cb=[]
+players=cricket+badminton+football
+for i in players:
+    if i not in cricket and i not in badminton:
+        nither_cb.append(i)
+print("Students playing nither cricket nor badminton are: ",nither_cb)
+
+cf=cricket+football
+cf_not_b=[]
+for i in cf:
+    if i not in badminton:
+        cf_not_b.append(i)
+print("Students playing cricket and football but not badminton are: ",cf_not_b)
