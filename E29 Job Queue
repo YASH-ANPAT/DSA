@@ -1,0 +1,95 @@
+#include <iostream>
+#include <string>
+using namespace std;
+
+// Queue implementation
+class JobQueue {
+private:
+    string jobs[100]; // Array to hold jobs
+    int front, rear;  // Front and rear pointers
+    int maxSize;      // Maximum size of the queue
+
+public:
+    JobQueue() {
+        front = -1;
+        rear = -1;
+        maxSize = 100; // Maximum size of the queue
+    }
+
+    // Function to add a job to the queue
+    void addJob(string jobName) {
+        if (rear == maxSize - 1) {
+            cout << "Queue is full. Cannot add more jobs.\n";
+            return;
+        }
+        if (front == -1) {
+            front = 0; // Initialize front when the first job is added
+        }
+        jobs[++rear] = jobName; // Insert job and move rear forward
+        cout << "Job '" << jobName << "' has been added to the queue.\n";
+    }
+
+    // Function to delete a job from the queue
+    void deleteJob() {
+        if (front == -1 || front > rear) {
+            cout << "The job queue is empty. Nothing to delete.\n";
+            return;
+        }
+        cout << "Job '" << jobs[front] << "' has been deleted from the queue.\n";
+        front++; // Move the front forward
+        if (front > rear) {
+            front = rear = -1; // Reset the queue if it's empty
+        }
+    }
+
+    // Function to display all jobs in the queue
+    void displayJobs() {
+        if (front == -1 || front > rear) {
+            cout << "The job queue is empty.\n";
+            return;
+        }
+        cout << "Current jobs in the queue:\n";
+        for (int i = front; i <= rear; i++) {
+            cout << "- " << jobs[i] << "\n";
+        }
+    }
+};
+
+int main() {
+    JobQueue jobQueue; // Create a JobQueue object
+    int choice;
+
+    while (true) {
+        cout << "\n--- Job Queue Management System ---\n";
+        cout << "1. Add Job\n";
+        cout << "2. Delete Job\n";
+        cout << "3. Display Jobs\n";
+        cout << "4. Exit\n";
+        cout << "Enter your choice: ";
+        cin >> choice;
+        cin.ignore(); // To ignore trailing newline
+
+        switch (choice) {
+            case 1: {
+                string jobName;
+                cout << "Enter the name of the job to add: ";
+                getline(cin, jobName);
+                jobQueue.addJob(jobName);
+                break;
+            }
+            case 2:
+                jobQueue.deleteJob();
+                break;
+            case 3:
+                jobQueue.displayJobs();
+                break;
+            case 4:
+                cout << "Exiting program. Goodbye!\n";
+                return 0;
+            default:
+                cout << "Invalid choice. Please try again.\n";
+        }
+    }
+
+    return 0;
+}
