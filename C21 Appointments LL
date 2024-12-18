@@ -1,0 +1,176 @@
+#include<iostream>
+using namespace std;
+
+class node
+{
+    public:
+        int apt_id;
+        float startt,endt;
+        node *next;
+};
+
+class ll
+{
+    node *head;
+    public:
+        ll()
+        {
+            head=NULL;
+        }
+
+        node* create()
+        {
+            int apt_id;
+            float startt,endt;
+
+            cout<<"Hospital time is from 10 to 5" << endl; 
+            cout<<"Minimum duration of appointment is 15 min and maximum duration is 30 min" << endl;
+            cout<<"\nEnter appointment id: ";
+            cin>>apt_id;
+
+        do 
+        {
+            cout<<"\nEnter start time (in 24-hour format, e.g., 10.00 for 10 AM): ";
+            cin>>startt;
+            cout<<"\nEnter end time (in 24-hour format, e.g., 10.30 for 10:30 AM): ";
+            cin>>endt;
+
+            if (startt < 10.00 || endt > 17.00 || endt <= startt || (endt-startt > 0.5)) 
+            {
+                cout << "Invalid time range. Please enter a valid start and end time." << endl;
+            }  
+        } while (startt < 10.00 || endt > 17.00 || endt <= startt || (endt-startt > 0.5));
+
+        node *p=new node;
+        p->apt_id=apt_id;
+        p->startt=startt;
+        p->endt=endt;
+        p->next=NULL;
+
+        if(head==NULL)
+        {
+            head=p;
+        }
+        else
+        {
+            node *q=head;
+            while(q->next!=NULL)
+            {
+                q=q->next;
+            }
+            q->next=p;
+        }
+        return head;
+        }
+        
+        void display (node *head) 
+        {
+            node *p = head;
+            while (p != NULL) 
+            {
+                cout << "Appointment no.: "<< p->apt_id<<endl;
+                cout << "Start time: "<< p->startt << endl; 
+                cout<< "End time: "<< p->endt << endl;
+                p = p->next;
+                
+            }
+        }
+
+        void sort()
+        {
+            for(node *i = head; i != NULL; i=i->next)
+            {
+                for(node *j=i->next; j != NULL; j=j->next)
+                {
+                    if(i->startt>j->startt)
+                    {
+                        int temp_id=i->apt_id;
+                        i->apt_id=j->apt_id;
+                        j->apt_id=temp_id;
+
+                        float temp_start=i->startt;
+                        i->startt=j->startt;
+                        j->startt=temp_start;
+
+                        float temp_end=i->endt;
+                        i->endt=j->endt;
+                        j->endt=temp_end;
+                    }
+                }
+            }
+        }
+
+        void cancel()
+        {
+            int apt_id;
+            cout<< "\n\nPlease enter appointment id to cancle: ";
+            cin>>apt_id;
+
+            node *temp_id=head;
+            node *prev=NULL;
+
+            while(temp_id!=NULL)
+            {
+                if(temp_id->apt_id==apt_id)
+                {
+                    if(prev==NULL)
+                    {
+                        head=temp_id->next;
+                    }
+                    else
+                    {
+                        prev->next=temp_id->next;
+                    }
+                    delete temp_id;
+                    cout<< "\n\nYour appointment slot is canceled "<<endl;
+                    return;
+                }
+                prev=temp_id;
+                temp_id=temp_id->next;
+            }
+            cout<< "\n\nYour appontment was not found "<<endl;
+        }
+
+        void menu()
+        {
+            int ch;
+            do
+            {
+                cout<<"\nEnter option :- \n1.Create Appointment \n2.Display Appointments \n3.Sort APpointments\n4.Cancel Appointment\n5.Exit Menu"<<endl;
+                cin>>ch;
+
+                switch(ch)
+                {
+                    case 1:
+                        create();
+                        break;
+                    case 2:
+                        display(head);
+                        break;
+                    case 3:
+                        sort();
+                        display(head);
+                        break;
+                    case 4:
+                        cancel();
+                        display(head);
+                        break;
+                    case 5:
+                        break;
+                    default:
+                        cout<<"Invalid Option. Please try again......!"<<endl;
+                }
+               
+            } while(ch!=5);
+            
+        }
+    
+    
+};
+
+int main()
+{
+    ll l1;
+    l1.menu();
+    return 0;
+}
